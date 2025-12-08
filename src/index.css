@@ -1,0 +1,14 @@
+.dark-mode {
+  background-color: #121212 !important;
+  color: white;
+}
+
+.dark-card {
+  background-color: #1f1f1f !important;
+  color: white;
+}
+
+.dark-btn {
+  border-color: white !important;
+  color: white !important;
+}
