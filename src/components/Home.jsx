@@ -69,15 +69,15 @@ function Home() {
                 <div className="row justify-content-center">
                     <div className="col-lg-10">
                         <div className="human-card p-4 p-md-5 fade-in">
-                            <div className="text-center mb-5">
-                                <h1 className="display-4 mb-2">
+                            <div className="text-center mb-4">
+                                <h2 className="mb-1">
                                     Ready for a <span className="text-gradient">Challenge?</span>
-                                </h1>
-                                <p className="text-muted fs-5">Pick your topic and let's go.</p>
+                                </h2>
+                                <p className="text-muted small">Pick your topic and let's go.</p>
                             </div>
 
-                            <div className="mb-5">
-                                <div className="row g-4">
+                            <div className="mb-4">
+                                <div className="row g-3">
                                     {categories.length > 0 ? (
                                         categories.map((cat) => (
                                             <div key={cat.id} className="col-6 col-sm-4 col-md-3">
@@ -86,24 +86,24 @@ function Home() {
                                                     onClick={() => setCategory(cat.id)}
                                                 >
                                                     <i className={`bi ${getCategoryIcon(cat.name)} cat-icon-large`}></i>
-                                                    <span className="fw-bold small">{cat.name.split(":")[cat.name.split(":").length - 1].trim()}</span>
+                                                    <div className="fw-bold small">{cat.name.split(":")[cat.name.split(":").length - 1].trim()}</div>
                                                 </div>
                                             </div>
                                         ))
                                     ) : (
-                                        <div className="text-center w-100 py-5">
-                                            <div className="spinner-grow text-primary opacity-25"></div>
+                                        <div className="text-center w-100 py-4">
+                                            <div className="spinner-grow text-primary opacity-25" style={{ width: '2rem', height: '2rem' }}></div>
                                         </div>
                                     )}
                                 </div>
                             </div>
 
-                            <div className="d-flex flex-column flex-md-row align-items-center justify-content-between gap-4 mt-5 pt-4 border-top border-light">
+                            <div className="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 mt-4 pt-3 border-top border-light">
                                 <div className="d-flex gap-2">
                                     {difficulties.map((diff) => (
                                         <div
                                             key={diff.value}
-                                            className={`pill-option ${difficulty === diff.value ? "active" : ""}`}
+                                            className={`pill-option py-2 px-3 small ${difficulty === diff.value ? "active" : ""}`}
                                             onClick={() => setDifficulty(diff.value)}
                                         >
                                             {diff.label}
@@ -112,7 +112,7 @@ function Home() {
                                 </div>
 
                                 <button
-                                    className="btn-human px-5"
+                                    className="btn-human px-4"
                                     onClick={startQuiz}
                                 >
                                     Start Now <i className="bi bi-arrow-right"></i>

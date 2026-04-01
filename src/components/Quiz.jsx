@@ -84,53 +84,53 @@ function Quiz() {
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-12 col-lg-9">
-            <div className="human-card p-4 p-md-5 fade-in">
-              <div className="d-flex justify-content-between align-items-center mb-5">
+            <div className="human-card p-4 fade-in" style={{ maxWidth: '800px' }}>
+              <div className="d-flex justify-content-between align-items-center mb-4">
                 <span className="fw-bold text-muted small">
-                  {currentIndex + 1} / {questions.length}
+                  {currentIndex + 1} of {questions.length}
                 </span>
-                <div className={`d-flex align-items-center gap-2 px-3 py-1 rounded-pill ${timer <= 5 ? 'bg-danger text-white' : 'bg-light'}`}>
-                  <i className="bi bi-clock-fill"></i>
+                <div className={`d-flex align-items-center gap-2 px-2 py-1 rounded ${timer <= 5 ? 'bg-danger text-white' : 'bg-light'} small`}>
+                  <i className="bi bi-clock"></i>
                   <span className="fw-bold">{timer}s</span>
                 </div>
               </div>
 
-              <div className="text-center mb-5">
-                <h2 
-                  className="mx-auto" 
-                  style={{ fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', maxWidth: '800px', lineHeight: '1.4' }}
+              <div className="text-center mb-4">
+                <h3 
+                  className="mx-auto fw-bold" 
+                  style={{ fontSize: '1.4rem', lineHeight: '1.4' }}
                   dangerouslySetInnerHTML={{ __html: currentQuestion.question }}
                 />
               </div>
 
-              <div className="row g-3 mb-5 mt-4">
+              <div className="row g-2 mb-4">
                 {options.map((opt, index) => (
                   <div key={index} className="col-12 col-md-6">
                     <button
-                      className={`pill-option w-100 py-3 px-4 text-start d-flex align-items-center gap-3 ${
+                      className={`pill-option w-100 py-3 px-3 text-start d-flex align-items-center gap-2 ${
                         selectedOption === opt 
                           ? (opt === currentQuestion.correct_answer ? 'bg-success text-white border-success' : 'bg-danger text-white border-danger') 
                           : (selectedOption && opt === currentQuestion.correct_answer ? 'border-success text-success' : '')
                       }`}
                       onClick={() => handleAnswer(opt)}
                       disabled={!!selectedOption}
-                      style={{ height: '100%', fontSize: '1.1rem' }}
+                      style={{ fontSize: '0.95rem' }}
                     >
-                      <span className="opacity-50 fw-black">{String.fromCharCode(65 + index)}</span>
+                      <span className="opacity-50 small fw-bold">{String.fromCharCode(65 + index)}</span>
                       <span dangerouslySetInnerHTML={{ __html: opt }} />
-                      {selectedOption && opt === currentQuestion.correct_answer && <i className="bi bi-check-lg ms-auto"></i>}
+                      {selectedOption && opt === currentQuestion.correct_answer && <i className="bi bi-check2 ms-auto"></i>}
                     </button>
                   </div>
                 ))}
               </div>
 
-              <div className="text-center pt-4 border-top border-light">
+              <div className="text-center pt-3 border-top border-light">
                 <button
-                  className="btn-human"
+                  className="btn-human px-4"
                   onClick={handleNext}
                   disabled={!selectedOption}
                 >
-                  {currentIndex + 1 === questions.length ? "Finish" : "Next One"} <i className="bi bi-arrow-right"></i>
+                  {currentIndex + 1 === questions.length ? "Finish" : "Next Question"} <i className="bi bi-arrow-right"></i>
                 </button>
               </div>
             </div>

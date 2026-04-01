@@ -30,45 +30,44 @@ function Result() {
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-12 col-md-8 col-lg-6">
-                        <div className="human-card p-4 p-md-5 text-center fade-in">
-                            
-                            <div className="mb-5">
-                                <div className="display-1 mb-4">{praise.emoji}</div>
-                                <h1 className="display-4 mb-2">{praise.phrase}</h1>
-                                <p className="text-muted fs-5 px-4">{praise.msg}</p>
+                        <div className="human-card p-4 text-center fade-in" style={{ maxWidth: '600px' }}>
+                            <div className="mb-4">
+                                <div className="display-4 mb-2">{praise.emoji}</div>
+                                <h2 className="mb-1">{praise.phrase}</h2>
+                                <p className="text-muted small px-3">{praise.msg}</p>
                             </div>
 
-                            <div className="position-relative d-inline-block mb-5">
-                                <h1 className="display-2 fw-black text-gradient mb-0" style={{ fontSize: '5rem' }}>
+                            <div className="mb-4">
+                                <h1 className="display-3 fw-bold text-gradient mb-0">
                                     {percentage}%
                                 </h1>
-                                <div className="text-muted fw-bold small mt-minus-1">ACCURACY SCORE</div>
+                                <div className="text-muted small fw-bold">ACCURACY</div>
                             </div>
 
-                            <div className="d-flex justify-content-center gap-3 mb-5">
-                                <div className="pill-option py-3 px-4 border-light bg-light bg-opacity-50">
-                                    <div className="small text-muted mb-1">CORRECT</div>
-                                    <div className="h4 fw-black mb-0 text-success">{score}</div>
+                            <div className="d-flex justify-content-center gap-2 mb-4">
+                                <div className="pill-option py-2 px-3 border-light bg-light bg-opacity-30">
+                                    <div className="small text-muted">Correct</div>
+                                    <div className="fw-bold text-success">{score}</div>
                                 </div>
-                                <div className="pill-option py-3 px-4 border-light bg-light bg-opacity-50">
-                                    <div className="small text-muted mb-1">TOTAL</div>
-                                    <div className="h4 fw-black mb-0 text-primary">{total}</div>
+                                <div className="pill-option py-2 px-3 border-light bg-light bg-opacity-30">
+                                    <div className="small text-muted">Total</div>
+                                    <div className="fw-bold text-primary">{total}</div>
                                 </div>
                             </div>
 
-                            <div className="d-grid gap-3 pt-5 border-top border-light">
+                            <div className="d-grid gap-2 pt-4 border-top border-light">
                                 <button
-                                    className="btn-human justify-content-center py-3"
+                                    className="btn-human justify-content-center py-2"
                                     onClick={() => navigate("/quiz" + location.search)}
                                 >
                                     <i className="bi bi-arrow-clockwise"></i> Play Again
                                 </button>
 
                                 <button
-                                    className="btn-human-secondary py-3 rounded-pill fw-bold"
+                                    className="btn-human-secondary py-2 rounded-pill fw-bold small"
                                     onClick={() => navigate("/")}
                                 >
-                                    <i className="bi bi-house"></i> Home
+                                    Home
                                 </button>
                             </div>
                         </div>
