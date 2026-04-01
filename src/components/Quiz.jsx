@@ -18,56 +18,33 @@ function Quiz() {
   const [selectedOption, setSelectedOption] = useState("");
   const [timer, setTimer] = useState(15);
   const [loading, setLoading] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    setQuestions([]);
-    setCurrentIndex(0);
-    setScore(0);
-    setSelectedOption("");
-    setTimer(15);
-
     fetch(
       `https://opentdb.com/api.php?amount=10&category=${safeCategory}&difficulty=${safeDifficulty}&type=multiple`
     )
       .then((res) => res.json())
       .then((data) => {
-        if (!data.results || data.results.length === 0) {
-          console.log("No questions returned from API");
-          setLoading(false);
-          return;
-        }
-
-        setQuestions(data.results);
+        if (data.results) setQuestions(data.results);
         setLoading(false);
       })
-      .catch((err) => {
-        console.error("API Error:", err);
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
   }, [location.search]);
 
   useEffect(() => {
-    if (loading) return;
-
+    if (loading || !questions.length) return;
     if (timer === 0) {
       handleNext();
       return;
     }
-
-    const interval = setInterval(() => {
-      setTimer((prev) => prev - 1);
-    }, 1000);
-
+    const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
     return () => clearInterval(interval);
-  }, [timer, loading]);
+  }, [timer, loading, questions.length]);
 
   function handleAnswer(option) {
     if (selectedOption) return;
-
     setSelectedOption(option);
-
     if (option === questions[currentIndex].correct_answer) {
       setScore((prev) => prev + 1);
     }
@@ -76,18 +53,17 @@ function Quiz() {
   function handleNext() {
     setSelectedOption("");
     setTimer(15);
-
     if (currentIndex + 1 < questions.length) {
       setCurrentIndex((prev) => prev + 1);
     } else {
-      navigate(`/result?score=${score}&total=${questions.length}`);
+      navigate(`/result?score=${score}&total=${questions.length}${location.search.replace('?', '&')}`);
     }
   }
 
   if (loading || !questions.length) {
     return (
       <div className="min-vh-100 d-flex justify-content-center align-items-center">
-        <div className="spinner-border text-primary"></div>
+        <div className="spinner-grow text-primary opacity-25"></div>
       </div>
     );
   }
@@ -99,79 +75,62 @@ function Quiz() {
   ].sort();
 
   return (
-    <div
-      className={`min-vh-100 d-flex align-items-center ${
-        darkMode ? "dark-mode" : "bg-light"
-      }`}
-    >
+    <div className="min-vh-100 d-flex align-items-center py-5">
+      <div className="animated-bg">
+        <div className="blob blob-1"></div>
+        <div className="blob blob-2"></div>
+      </div>
+
       <div className="container">
         <div className="row justify-content-center">
-          <div className="col-12 col-sm-10 col-md-8 col-lg-6">
-            <div
-              className={`card shadow-lg border-0 rounded-4 p-4 fade-slide ${
-                darkMode ? "dark-card" : ""
-              }`}
-            >
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <span className="fw-semibold">
-                  Question {currentIndex + 1} / {questions.length}
+          <div className="col-12 col-lg-9">
+            <div className="human-card p-4 p-md-5 fade-in">
+              <div className="d-flex justify-content-between align-items-center mb-5">
+                <span className="fw-bold text-muted small">
+                  {currentIndex + 1} / {questions.length}
                 </span>
-
-                <div className="d-flex align-items-center gap-2">
-                  <span className="badge bg-danger fs-6">{timer}s</span>
-                  <button
-                    className="btn btn-sm btn-outline-secondary"
-                    onClick={() => setDarkMode(!darkMode)}
-                  >
-                    {darkMode ? " Light" : " Dark"}
-                  </button>
+                <div className={`d-flex align-items-center gap-2 px-3 py-1 rounded-pill ${timer <= 5 ? 'bg-danger text-white' : 'bg-light'}`}>
+                  <i className="bi bi-clock-fill"></i>
+                  <span className="fw-bold">{timer}s</span>
                 </div>
               </div>
 
-              <h5
-                className="fw-bold mb-4"
-                dangerouslySetInnerHTML={{
-                  __html: currentQuestion.question,
-                }}
-              />
-
-              <div className="d-grid gap-3 mb-4">
-                {options.map((opt, index) => {
-                  let btnClass = "btn btn-outline-primary";
-
-                  if (selectedOption) {
-                    if (opt === currentQuestion.correct_answer) {
-                      btnClass = "btn btn-success";
-                    } else if (opt === selectedOption) {
-                      btnClass = "btn btn-danger";
-                    } else {
-                      btnClass = "btn btn-outline-secondary";
-                    }
-                  }
-
-                  return (
-                    <button
-                      key={index}
-                      className={`${btnClass} ${
-                        darkMode ? "dark-btn" : ""
-                      }`}
-                      onClick={() => handleAnswer(opt)}
-                      disabled={selectedOption !== ""}
-                      dangerouslySetInnerHTML={{ __html: opt }}
-                    />
-                  );
-                })}
+              <div className="text-center mb-5">
+                <h2 
+                  className="mx-auto" 
+                  style={{ fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', maxWidth: '800px', lineHeight: '1.4' }}
+                  dangerouslySetInnerHTML={{ __html: currentQuestion.question }}
+                />
               </div>
 
-              <div className="d-flex justify-content-between align-items-center">
-                <span className="fw-semibold">Score: {score}</span>
+              <div className="row g-3 mb-5 mt-4">
+                {options.map((opt, index) => (
+                  <div key={index} className="col-12 col-md-6">
+                    <button
+                      className={`pill-option w-100 py-3 px-4 text-start d-flex align-items-center gap-3 ${
+                        selectedOption === opt 
+                          ? (opt === currentQuestion.correct_answer ? 'bg-success text-white border-success' : 'bg-danger text-white border-danger') 
+                          : (selectedOption && opt === currentQuestion.correct_answer ? 'border-success text-success' : '')
+                      }`}
+                      onClick={() => handleAnswer(opt)}
+                      disabled={!!selectedOption}
+                      style={{ height: '100%', fontSize: '1.1rem' }}
+                    >
+                      <span className="opacity-50 fw-black">{String.fromCharCode(65 + index)}</span>
+                      <span dangerouslySetInnerHTML={{ __html: opt }} />
+                      {selectedOption && opt === currentQuestion.correct_answer && <i className="bi bi-check-lg ms-auto"></i>}
+                    </button>
+                  </div>
+                ))}
+              </div>
 
+              <div className="text-center pt-4 border-top border-light">
                 <button
-                  className="btn btn-primary px-4"
+                  className="btn-human"
                   onClick={handleNext}
                   disabled={!selectedOption}
                 >
-                  {currentIndex + 1 === questions.length ? "Finish" : "Next"}
+                  {currentIndex + 1 === questions.length ? "Finish" : "Next One"} <i className="bi bi-arrow-right"></i>
                 </button>
               </div>
             </div>
